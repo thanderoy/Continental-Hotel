@@ -28,8 +28,7 @@ class Room(models.Model):
 
     def __str__(self) -> str:
         return (
-            f"{self.room_number} {self.category}: "
-            f"{self.beds} Bed(s) - {self.price}"
+            f"{self.room_number} {self.category}: " f"{self.beds} Bed(s) - {self.price}"
         )
 
 
@@ -37,7 +36,7 @@ class Reservation(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(
-        USER_MODEL, on_delete=models.CASCADE, related_name='reservations'
+        USER_MODEL, on_delete=models.CASCADE, related_name="reservations"
     )
     room = models.OneToOneField(Room, on_delete=models.CASCADE)
     check_in = models.DateTimeField()

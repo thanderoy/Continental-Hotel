@@ -3,7 +3,6 @@ from datetime import datetime
 
 
 class ReservationForm(forms.Form):
-
     today = datetime.now()
 
     check_in = forms.DateTimeField(input_formats=["%m/%d/%Y %H:%M"], required=True)

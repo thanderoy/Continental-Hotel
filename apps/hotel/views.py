@@ -22,9 +22,7 @@ def RoomListView(request):
 
 
 def RoomDetailView(request, room_number):
-    room = get_object_or_404(
-        Room.object.get(room_number=room_number)
-    )
+    room = get_object_or_404(Room.object.get(room_number=room_number))
 
     if request.method == "GET":
         form = ReservationForm()
@@ -74,27 +72,25 @@ def ReservationListView(request):
     if request.user.is_staff:
         reservations = Reservation.object.filter(
             owner=request.user,
-        ).order_by('created')
+        ).order_by("created")
     else:
         reservations = Reservation.object.all()
 
-    context = {
-        "reservations": reservations
-    }
+    context = {"reservations": reservations}
 
     return render(request, "reservation_list.html", context)
 
 
 def ReservationDetailView(request, id):
     reservation = get_object_or_404(
-            Reservation.objects.get(id=id,)
+        Reservation.objects.get(
+            id=id,
+        )
     )
 
     if request.method == "POST":
         reservation.cancel()
-        context = {
-            "reservation": reservation
-        }
+        context = {"reservation": reservation}
 
     return render(request, "reservation_detail.html", context)
 
@@ -105,8 +101,8 @@ def stk_push_callback(request):
         data = request.body
         data = data.json()
 
-        result_code = data.get("Body")['stkcallback']["ResultCode"]
-        result_desc = data.get("Body")['stkcallback']["ResultDesc"]
+        result_code = data.get("Body")["stkcallback"]["ResultCode"]
+        result_desc = data.get("Body")["stkcallback"]["ResultDesc"]
 
         if result_code != "0":
             return render(request, "payment_error.html")
