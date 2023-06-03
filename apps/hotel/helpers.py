@@ -12,5 +12,5 @@ def render_to_pdf(template, context: Optional[dict]):
     result = BytesIO()
     pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
     if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
+        return HttpResponse(result.getvalue(), content_type="application/pdf")
     return None

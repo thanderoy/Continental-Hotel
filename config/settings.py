@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import os
+
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG")
+DEBUG = config("DEBUG", default=False)
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -40,9 +41,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     # Local
     "apps.hotel.apps.HotelConfig",
+    "apps.authy.apps.AuthyConfig",
 ]
 
 MIDDLEWARE = [
@@ -111,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Africa/Nairobi"
 
 USE_I18N = True
 
@@ -128,11 +129,13 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+AUTH_USER_MODEL = "authy.User"
+
 # MPESA Configs
-MPESA_ENVIRONMENT = os.getenv("MPESA_ENVIRONMENT")
-MPESA_CONSUMER_KEY = os.getenv("MPESA_CONSUMER_KEY")
-MPESA_CONSUMER_SECRET = os.getenv("MPESA_CONSUMER_SECRET")
-MPESA_SHORT_CODE = os.getenv("MPESA_SHORT_CODE")
-MPESA_PASS_KEY = os.getenv("MPESA_PASS_KEY")
-MPESA_INITIATOR_USERNAME = os.getenv("MPESA_INITIATOR_USERNAME")
-MPESA_INITIATOR_SECURITY_CREDENTIAL = os.getenv("MPESA_INITIATOR_SECURITY_CREDENTIAL")
+MPESA_ENVIRONMENT = config("MPESA_ENVIRONMENT")
+MPESA_CONSUMER_KEY = config("MPESA_CONSUMER_KEY")
+MPESA_CONSUMER_SECRET = config("MPESA_CONSUMER_SECRET")
+MPESA_SHORT_CODE = config("MPESA_SHORT_CODE")
+MPESA_PASSKEY = config("MPESA_PASSKEY")
+MPESA_INITIATOR_USERNAME = config("MPESA_INITIATOR_USERNAME")
+MPESA_INITIATOR_SECURITY_CREDENTIAL = config("MPESA_INITIATOR_SECURITY_CREDENTIAL")

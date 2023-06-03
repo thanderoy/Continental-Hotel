@@ -4,8 +4,5 @@ from django.contrib import messages
 
 
 def login_user(request):
-
-    context = {
-
-    }
+    context = {}
     return render(request, "authy/login.html", context)
