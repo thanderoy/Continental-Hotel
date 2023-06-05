@@ -3,14 +3,6 @@ from django.conf import settings
 
 USER_MODEL = settings.AUTH_USER_MODEL
 
-
-ROOM_CATEGORIES = (
-    ("BZS", "BUSINESS SUITE"),
-    ("TWS", "TWIN SUITE"),
-    ("EXS", "EXECUTIVE SUITE"),
-    ("SGB", "SINGLE BED"),
-)
-
 RESERVATION_STATUS = (
     ("PENDING", "Pending"),
     ("FULFILLED", "Fulfilled"),
@@ -18,23 +10,33 @@ RESERVATION_STATUS = (
 )
 
 
-class Room(models.Model):
-    room_number = models.IntegerField()
-    category = models.CharField(choices=ROOM_CATEGORIES, max_length=3)
+class Category(models.Model):
+    class Categories(models.TextChoices):
+        BZS = "BZS", "Business Suite"
+        TWS = "TWS", "Twin Suite"
+        EXS = "EXS", "Executive Suite"
+        SGB = "SGB", "Single Bed"
+
+    category_code = models.CharField(max_length=3, choices=Categories.choices)
     beds = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image_url = models.CharField(max_length=1000, null=True, blank=True)
+
+
+class Room(models.Model):
+    room_number = models.IntegerField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     is_available = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return (
-            f"{self.room_number} {self.category}: " f"{self.beds} Bed(s) - {self.price}"
+            f"Room {self.room_number} {self.category.category_name} \
+            - {self.category.price}"
         )
 
 
 class Reservation(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+
     owner = models.ForeignKey(
         USER_MODEL, on_delete=models.CASCADE, related_name="reservations"
     )

@@ -1,39 +1,10 @@
-import uuid
-
 from django.contrib.auth.models import (
-    AbstractUser, BaseUserManager, PermissionsMixin
-)
-import uuid
-
-from django.contrib.auth.models import (
-    AbstractUser, BaseUserManager, PermissionsMixin
-)
+    AbstractUser, BaseUserManager, PermissionsMixin)
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils import timezone
 
-
-class BaseModel(models.Model):
-    """Base class for all models."""
-
-    id = models.UUIDField(
-        default=uuid.uuid4, editable=False, unique=True, primary_key=True
-    )
-    created = models.DateTimeField(db_index=True, editable=False, default=timezone.now)
-    updated = models.DateTimeField(db_index=True, default=timezone.now)
-
-    def save(self, *args, **kwargs):
-        """Ensure validations are run and updated/created preserved."""
-        self.updated = timezone.now()
-        self.full_clean(exclude=None)
-        super(BaseModel, self).save(*args, **kwargs)
-
-    class Meta:
-        """Define a default least recently used ordering."""
-
-        abstract = True
-        ordering = ("-updated", "-created")
+from apps.common.models import BaseModel
 
 
 class BaseManager(BaseUserManager):
@@ -54,7 +25,7 @@ class BaseManager(BaseUserManager):
         self, email, username, first_name, last_name, password, **other_fields
     ):
         if not email:
-            raise ValueError("You must provide an email address. :sweat_smile:")
+            raise ValueError("You must provide an email address. 😅")
 
         email = self.normalize_email(email)
         user = self.model(
