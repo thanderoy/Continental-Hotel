@@ -19,14 +19,14 @@ def RoomOfferingView(request):
 
 def RoomDetailView(request, id):
     category = get_object_or_404(
-        Category.objects.get(id=id))
+        Category, id=id)
 
-    available_room = category.get_available_rooms().first()
+    room = category.get_rooms_available().first()
 
     if request.method == "GET":
         form = ReservationForm()
         context = {
-            "available_room": available_room,
+            "room": room,
             "form": form,
         }
 
@@ -35,7 +35,7 @@ def RoomDetailView(request, id):
     elif request.method == "POST":
         form = ReservationForm(request.POST)
 
-        if form.is_valid:
+        if form.is_valid():
             form = form.cleaned_data
 
             reservation = Reservation.objects.create(
@@ -46,25 +46,25 @@ def RoomDetailView(request, id):
                 status=ReservationStatus.PENDING,
             )
 
-            # Initiate Payment procedure
-            client = MpesaClient()
-            callback_url = settings.CALLBACK_URL
+            # # Initiate Payment procedure
+            # client = MpesaClient()
+            # callback_url = settings.CALLBACK_URL
 
-            response = client.stk_push(
-                form.get("phone_number"),
-                room.category.price,
-                "The Continental.",
-                "Room Reservation",
-                callback_url,
-            )
+            # response = client.stk_push(
+            #     form.get("phone_number"),
+            #     room.category.price,
+            #     "The Continental.",
+            #     "Room Reservation",
+            #     callback_url,
+            # )
 
-            response = response.json()
+            # response = response.json()
 
             context = {
                 "reservation": reservation,
             }
 
-            return render(request, "hotel/reservation_created.html", context)
+            return render(request, "hotel/reservation_detail.html", context)
 
 
 def ReservationListView(request):

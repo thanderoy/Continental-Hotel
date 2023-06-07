@@ -1,0 +1,74 @@
+{% extends "hotel/base.html" %}
+{% block title %}Continental | Room - {{ room.category.category_name }}{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <div class="row d-flex flex-wrap">
+
+        {% if room is None %}
+
+            <div class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Room Unavailable.</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Unfortunately we are out of those rooms.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" href="{% url 'hotel:room_offering' %}">Back</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+
+            <div class="col m-5">
+                <div class="row align-items-center p-5 w-100">
+                    <div class="w-50">
+                        <img src="{{ room.category.image_url }}" class="d-block mx-lg-auto img-fluid" alt="Room Image" loading="lazy">
+                    </div>
+                    <div class="w-50 p-2">
+                        <h1 class="display-5 fw-bold lh-1 mb-3">{{ room.category.category_name }}</h1>
+                        <p class="lead">Beds: {{ room.category.beds }}</p>
+                        <p class="lead">Room Price: Ksh. {{ room.category.price }}</p>
+                        <hr>
+                        <div class="p-2 justify-content-center">
+                            <form id="reservation_form"action="" method="POST">
+                                {% csrf_token %}
+
+                                {% for field in form %}
+
+                                    <div class="form-group">
+                                        <label class="form-label">{{ field.label }}</label> 
+                                        <input type="datetime" class="form-control">{{ field }}
+                                        <small class="form-text text-muted">{{ field.errors }}</small>
+
+                                        {% if field.help_text %}
+                                            <p class="form-text text-muted">{{ field.help_text|safe }}</p>
+                                        {% endif %}
+
+                                    </div>
+                        
+                                {% endfor %}
+                                <div class="p-2 justify-content-center d-flex">
+                                    <button type="submit" class="btn btn-primary">Reserve</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock content %}
