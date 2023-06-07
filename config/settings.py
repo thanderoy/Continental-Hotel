@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # Local
     "apps.hotel.apps.HotelConfig",
     "apps.authy.apps.AuthyConfig",
+    "django_daraja"
 ]
 
 MIDDLEWARE = [

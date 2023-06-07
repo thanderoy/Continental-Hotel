@@ -15,7 +15,8 @@ class BaseModel(models.Model):
     )
     created = models.DateTimeField(
         db_index=True, editable=False, default=timezone.now)
-    updated = models.DateTimeField(db_index=True, default=timezone.now)
+    updated = models.DateTimeField(
+        db_index=True, editable=False, default=timezone.now)
 
     def save(self, *args, **kwargs):
         """Ensure validations are run and updated/created preserved."""

@@ -1,37 +1,36 @@
-from typing import Any, Dict
-
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponse, get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from django_daraja.mpesa.core import MpesaClient
 
+from .forms import ReservationForm
 from .helpers import render_to_pdf
-from .models import Reservation, Room
+from .models import Category, Reservation, ReservationStatus, Room
 
 
-def RoomListView(request):
-    available_rooms = Room.object.filter(
-        is_reserved=False,
-    )
+def RoomOfferingView(request):
+    offerings = Category.objects.all()
 
     context = {
-        "available_rooms": available_rooms,
+        "offerings": offerings,
     }
-    return render(request, "room_list.html", context)
+    return render(request, "hotel/room_list.html", context)
 
 
-def RoomDetailView(request, room_number):
-    room = get_object_or_404(Room.object.get(room_number=room_number))
+def RoomDetailView(request, id):
+    category = get_object_or_404(
+        Category.objects.get(id=id))
+
+    available_room = category.get_available_rooms().first()
 
     if request.method == "GET":
         form = ReservationForm()
         context = {
-            "room": room,
+            "available_room": available_room,
             "form": form,
         }
 
-        return render(request, "room_detail.html", context)
+        return render(request, "hotel/room_detail.html", context)
 
     elif request.method == "POST":
         form = ReservationForm(request.POST)
@@ -44,7 +43,7 @@ def RoomDetailView(request, room_number):
                 room=room,
                 check_in=form.get("check_in"),
                 check_out=form.get("check_out"),
-                status="PENDING",
+                status=ReservationStatus.PENDING,
             )
 
             # Initiate Payment procedure
@@ -53,7 +52,7 @@ def RoomDetailView(request, room_number):
 
             response = client.stk_push(
                 form.get("phone_number"),
-                room.price,
+                room.category.price,
                 "The Continental.",
                 "Room Reservation",
                 callback_url,
@@ -65,20 +64,24 @@ def RoomDetailView(request, room_number):
                 "reservation": reservation,
             }
 
-            return render(request, "reservation_created.html", context)
+            return render(request, "hotel/reservation_created.html", context)
 
 
 def ReservationListView(request):
-    if request.user.is_staff:
-        reservations = Reservation.object.filter(
+    if request.user.is_staff is False:
+        # For non-staff users, only get their Reservations
+        reservations = Reservation.objects.filter(
             owner=request.user,
         ).order_by("created")
     else:
-        reservations = Reservation.object.all()
+        # For staff + superusers, get all Reservations.
+        reservations = Reservation.objects.all()
 
-    context = {"reservations": reservations}
+    context = {
+        "reservations": reservations
+    }
 
-    return render(request, "reservation_list.html", context)
+    return render(request, "hotel/reservation_list.html", context)
 
 
 def ReservationDetailView(request, id):
@@ -90,9 +93,12 @@ def ReservationDetailView(request, id):
 
     if request.method == "POST":
         reservation.cancel()
-        context = {"reservation": reservation}
 
-    return render(request, "reservation_detail.html", context)
+    context = {
+        "reservation": reservation
+    }
+
+    return render(request, "hotel/reservation_detail.html", context)
 
 
 @csrf_exempt
@@ -105,7 +111,7 @@ def stk_push_callback(request):
         result_desc = data.get("Body")["stkcallback"]["ResultDesc"]
 
         if result_code != "0":
-            return render(request, "payment_error.html")
+            return render(request, "hotel/payment_error.html")
 
 
 def ReceiptDownloadView(request, reservation: Reservation):
@@ -115,16 +121,17 @@ def ReceiptDownloadView(request, reservation: Reservation):
             "tag": "Where the wicked rest.",
             "email": "helpdesk@thecontinental.com",
             "phone": "0790906416",
-            "room": reservation.room,
+            "room": reservation.room.room_number,
             "user": reservation.owner,
-            "category": reservation.room.category,
+            "category": reservation.room.category.category_name,
         }
 
         receipt = render_to_pdf("receipt_template.html", data)
 
         response = HttpResponse(receipt, content_type="application/pdf")
 
-        filename = f"Receipt_{123124}.pdf"
+        filename = f"Receipt_{reservation.room.room_number} \
+            - {reservation.room.category.category_name}_{reservation.created}.pdf"
         content = f"attachment; filename={filename}"
         response["Content-Disposition"] = content
         return response
