@@ -1,2 +1,38 @@
-{% extends "authy/base.html" %}\
-{% block title %}Continental | Login{% endblock %}\
+{% extends "authy/base.html" %}
+{% block title %}Continental | Login{% endblock %}
+
+{% block content %}
+<h1>Login</h1>
+
+  {% if form.errors %}
+    <div class="invalid-feedback">Your username and password didn't match. Please try again.</div>
+  {% endif %}
+
+
+  <form method="POST" action="">
+
+    {% csrf_token %}
+    
+    {% for field in form %}
+
+        <div class="form-group">
+            <label>{{ field.label }}</label>
+            <p> {{ field }} </p>
+        </div>
+
+    {% endfor %}
+
+    {% if form.non_field_errors %}
+        <div class="invalid-feedback">{{ form.non_field_errors }} </div>
+    {% endif %}
+
+    
+
+    <button type="submit" class="btn btn-primary">Login</button>
+
+  </form>
+
+  {# Assumes you setup the password_reset view in your URLconf #}
+  <p><a href="{% url 'authy:password_reset' %}">Lost password?</a></p>
+
+{% endblock %}

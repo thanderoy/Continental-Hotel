@@ -46,7 +46,7 @@ class User(AbstractUser, BaseModel, PermissionsMixin):
         STAFF = "STAFF", "Staff"
         CLIENT = "CLIENT", "Client"
 
-    base_role = Role.ADMIN
+    base_role = Role.CLIENT
 
     role = models.CharField(max_length=50, choices=Role.choices)
 
@@ -66,6 +66,18 @@ class User(AbstractUser, BaseModel, PermissionsMixin):
     def save(self, *args, **kwargs):
         self.role = self.base_role
         return super().save(*args, **kwargs)
+    
+    def has_perm(self, perm, obj=None):
+        """
+        Checks access to specified permission
+        """
+        return True
+    
+    def has_module_perms(self, app_label):
+        """
+        Checks access to models
+        """
+        return True
 
 
 class StaffManager(BaseManager):
