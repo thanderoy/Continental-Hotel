@@ -2,6 +2,8 @@ from typing import Any, Dict
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth import authenticate
+from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.core.exceptions import ValidationError
 
 from .models import User
 
@@ -13,9 +15,8 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = (
-            "username", "first_name", "last_name", "email",
-            "password1", "password2"
+        fields = UserCreationForm.Meta.fields + (
+            "email", "first_name", "last_name"
         )
 
 
@@ -24,11 +25,11 @@ class CustomUserChangeForm(UserChangeForm):
     Custom form for changing user information, using the custom User model.
     """
 
+    password = ReadOnlyPasswordHashField()
+
     class Meta:
         model = User
-        fields = (
-            "username", "first_name", "last_name", "email", "password"
-        )
+        fields = ("username", "first_name", "last_name", "email", "password")
 
 
 class CustomUserLoginForm(forms.Form):
@@ -36,27 +37,9 @@ class CustomUserLoginForm(forms.Form):
     Custom user login form used to validate login credentials.
     """
 
-    email = forms.CharField(
-        label="Email Address", widget=forms.EmailInput
-    )
-    password = forms.CharField(
-        label="Password", widget=forms.PasswordInput
-    )
+    email = forms.CharField(label="Email Address", widget=forms.EmailInput)
+    password = forms.CharField(label="Password", widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ("email", "password")
-
-    def clean(self) -> None:
-        """
-        Checks if the provided email and password are valid and raises a
-            validation error if they are not.
-        """
-        if self.is_valid():
-            form = self.cleaned_data
-
-            email = form.get("email")
-            password = form.get("password")
-
-            if not authenticate(email=email, password=password):
-                raise forms.ValidationError("Invalid Credentials")

@@ -14,9 +14,15 @@
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
                     <li class="nav_item"><a class="nav-link" href="{% url 'hotel:reservation_list' %}">Reservations</a></li>
-                    <ul>
-                        <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-                    </ul>
+                    {% if user.is_authenticated %}
+                        <ul>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'authy:logout' %}">Login</a></li>
+                        </ul>                      
+                    {% else %}
+                        <ul>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'authy:login' %}">Login</a></li>
+                        </ul>
+                    {% endif %}
                 </ul>
             </div>
         </div>

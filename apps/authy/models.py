@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from apps.common.models import BaseModel
 
 
-class BaseManager(BaseUserManager):
+class UserManager(BaseUserManager):
     def create_superuser(
         self, email, username, first_name, last_name, password, **other_fields
     ):
@@ -27,16 +27,16 @@ class BaseManager(BaseUserManager):
         if not email:
             raise ValueError("You must provide an email address. 😅")
 
-        email = self.normalize_email(email)
         user = self.model(
-            email=email,
+            email=self.normalize_email(email),
             username=username,
             first_name=first_name,
             last_name=last_name,
             **other_fields
         )
+        print(f"P - {password}")
         user.set_password(password)
-        user.save()
+        user.save(using=self._db)
         return user
 
 
@@ -55,7 +55,7 @@ class User(AbstractUser, BaseModel, PermissionsMixin):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
 
-    objects = BaseManager()
+    objects = UserManager()
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username", "first_name", "last_name"]
@@ -66,13 +66,13 @@ class User(AbstractUser, BaseModel, PermissionsMixin):
     def save(self, *args, **kwargs):
         self.role = self.base_role
         return super().save(*args, **kwargs)
-    
+
     def has_perm(self, perm, obj=None):
         """
         Checks access to specified permission
         """
         return True
-    
+
     def has_module_perms(self, app_label):
         """
         Checks access to models
@@ -80,7 +80,15 @@ class User(AbstractUser, BaseModel, PermissionsMixin):
         return True
 
 
-class StaffManager(BaseManager):
+class UserProfile(BaseModel):
+    """
+    Used to store any other extra details for the users.
+
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+
+class StaffManager(UserManager):
     def get_queryset(self, *args, **kwargs):
         results = super().get_queryset(*args, **kwargs)
         return results.filter(role=User.Role.STAFF)
@@ -94,12 +102,7 @@ class Staff(User):
         proxy = True
 
 
-class StaffProfile(BaseModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    staff_id = models.IntegerField(null=True, blank=True)
-
-
-class ClientManager(BaseManager):
+class ClientManager(UserManager):
     def get_queryset(self, *args, **kwargs):
         results = super().get_queryset(*args, **kwargs)
         return results.filter(role=User.Role.CLIENT)
@@ -113,20 +116,8 @@ class Client(User):
         proxy = True
 
 
-class ClientProfile(BaseModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    client_id = models.IntegerField(null=True, blank=True)
-
-
 # User Profile creation signals
-@receiver(post_save, sender=Client)
-@receiver(post_save, sender=Staff)
+@receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-    user_profile_map = {
-        Staff: StaffProfile,
-        Client: ClientProfile,
-        # Add other user type included
-    }
-
     if created:
-        user_profile_map[sender].objects.create(user=instance)
+        UserProfile.objects.create(user=instance)

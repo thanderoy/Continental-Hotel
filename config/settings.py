@@ -62,7 +62,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "apps/common/templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -140,3 +140,8 @@ MPESA_SHORT_CODE = config("MPESA_SHORT_CODE")
 MPESA_PASSKEY = config("MPESA_PASSKEY")
 MPESA_INITIATOR_USERNAME = config("MPESA_INITIATOR_USERNAME")
 MPESA_INITIATOR_SECURITY_CREDENTIAL = config("MPESA_INITIATOR_SECURITY_CREDENTIAL")
+
+# Authentication backends
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
