@@ -1,4 +1,4 @@
-{% extends "authy/base.html" %}
+{% extends "base.html" %}
 {% block title %}Continental | Login{% endblock %}
 
 {% block content %}
@@ -38,6 +38,7 @@
     {% endfor %}
 
     <button type="submit" class="btn btn-primary">Login</button>
+    <a class="nav-link" href="{% url 'authy:password_reset' %}">Forget Password</a>
 
   </form>
 

@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 
-from .forms import CustomUserCreationForm, CustomUserLoginForm
+from .forms import CustomUserCreationForm, CustomUserLoginForm, CustomPasswordResetForm
 from .models import User
 
 
@@ -15,7 +15,7 @@ def register_user(request):
         form = CustomUserCreationForm(request.POST)
 
         if form.is_valid():
-            user = form.save()
+            form.save()
 
             return redirect("authy:login")
 
@@ -59,4 +59,21 @@ def logout_user(request):
 
 
 def password_reset(request):
-    pass
+    
+    if request.method == "GET":
+        form = CustomPasswordResetForm()
+        
+    elif request.method == "POST":
+        form = CustomPasswordResetForm(request.POST)
+        
+        if form.is_valid():
+            form.save()
+
+            return render(request, "authy/post_password_reset.html")
+        
+        else:
+            form = CustomPasswordResetForm()
+    
+    context = {"form": form}
+    
+    return render(request, "authy/password_reset.html", context)

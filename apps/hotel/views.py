@@ -25,6 +25,10 @@ def RoomDetailView(request, id):
 
     if request.method == "GET":
         form = ReservationForm()
+
+        if room is None:
+            return HttpResponse("Unfortunately, we are out of those rooms. 😢")
+
         context = {
             "room": room,
             "form": form,
@@ -82,7 +86,6 @@ def ReservationListView(request):
     }
 
     return render(request, "hotel/reservation_list.html", context)
-
 
 def ReservationDetailView(request, id):
     reservation = get_object_or_404(

@@ -1,4 +1,4 @@
-{% extends "hotel/base.html" %}
+{% extends "base.html" %}
 {% block title %}Continental | Room - {{ room.category.category_name }}{% endblock title %}
 {% block content %}
 
@@ -39,14 +39,14 @@
                         <p class="lead">Room Price: Ksh. {{ room.category.price }}</p>
                         <hr>
                         <div class="p-2 justify-content-center">
-                            <form id="reservation_form"action="" method="POST">
+                            <form id="reservation_form" action="" method="POST">
                                 {% csrf_token %}
 
                                 {% for field in form %}
 
                                     <div class="form-group">
                                         <label class="form-label">{{ field.label }}</label> 
-                                        <input type="datetime" class="form-control">{{ field }}
+                                        <p> {{ field }} </p>
                                         <small class="form-text text-muted">{{ field.errors }}</small>
 
                                         {% if field.help_text %}

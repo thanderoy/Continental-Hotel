@@ -1,9 +1,7 @@
-from typing import Any, Dict
 from django import forms
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.contrib.auth import authenticate
+from django.contrib.auth.forms import (
+    UserChangeForm, UserCreationForm, PasswordResetForm)
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from django.core.exceptions import ValidationError
 
 from .models import User
 
@@ -43,3 +41,13 @@ class CustomUserLoginForm(forms.Form):
     class Meta:
         model = User
         fields = ("email", "password")
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    """
+    Custom form for resetting user passwords, using the custom User model.
+    """
+
+    class Meta:
+        model = User
+        fields = "__all__"
