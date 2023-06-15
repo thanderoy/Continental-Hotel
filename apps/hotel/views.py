@@ -40,6 +40,7 @@ def RoomDetailView(request, id):
         form = ReservationForm(request.POST)
 
         if form.is_valid():
+            print("valid res")
             form = form.cleaned_data
 
             reservation = Reservation.objects.create(
@@ -69,6 +70,8 @@ def RoomDetailView(request, id):
             }
 
             return render(request, "hotel/reservation_detail.html", context)
+        else:
+            return HttpResponse("Invalid form")
 
 
 def ReservationListView(request):
