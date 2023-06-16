@@ -71,6 +71,7 @@ def RoomDetailView(request, id):
 
             return render(request, "hotel/reservation_detail.html", context)
         else:
+            print(form.cleaned_data)
             return HttpResponse("Invalid form")
 
 
