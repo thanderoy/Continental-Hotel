@@ -18,11 +18,16 @@
                     <div class="p-2 ">
                         <p class="lead">Status: {{ reservation.status }}</p>
 
-                        {% if reservation.status == "Pending" %}
+                        {% if reservation.status == "PENDING"%}
 
-                            <div class="py-2  d-flex">
-                                <button type="submit" class="btn btn-warning">Cancel</button>
-                            </div>
+
+                            <form method="POST">
+                                {% csrf_token %}
+
+                                <div class="py-2  d-flex">
+                                    <button type="submit" class="btn btn-danger">Cancel</button>
+                                </div>
+                            </form>
 
                         {% endif %}
                         

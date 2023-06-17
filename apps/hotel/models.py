@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 
 from apps.common.models import BaseModel
+from .helpers import ReservationException
 
 USER_MODEL = settings.AUTH_USER_MODEL
 
@@ -48,6 +49,29 @@ class Room(BaseModel):
             - {self.category.price}"
         )
 
+    def reserve(self, owner, check_in, check_out):
+        if not self.is_available:
+            raise ReservationException(
+                f"Room {self.room_number} is already reserved"
+            )
+
+        try:
+            reservation = Reservation.objects.create(
+                owner=owner,
+                room=self,
+                check_in=check_in,
+                check_out=check_out,
+                status=ReservationStatus.PENDING,
+            )
+
+            self.is_available = False
+            self.save()
+
+            return reservation
+        except Exception as e:
+            print(e)
+            return None
+
 
 class ReservationStatus(models.TextChoices):
     PENDING = "PENDING", "Pending"
@@ -62,7 +86,7 @@ class Reservation(BaseModel):
     room = models.OneToOneField(Room, on_delete=models.CASCADE)
     check_in = models.DateTimeField()
     check_out = models.DateTimeField()
-    status = models.BooleanField(
+    status = models.CharField(
         max_length=50, choices=ReservationStatus.choices,
         default=ReservationStatus.PENDING
     )

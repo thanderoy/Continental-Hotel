@@ -1,24 +1,37 @@
 from django import forms
-from django.forms import MultiWidget, SplitDateTimeWidget
-from .models import Room, Category
+from .models import Room, Category, Reservation
 
 from datetime import datetime
 
 
-class ReservationForm(forms.Form):
+class ReservationForm(forms.ModelForm):
     today = datetime.now()
 
     check_in = forms.DateTimeField(
-        label="Check In", required=True,
-        widget=SplitDateTimeWidget(
-            date_format="%d/%m/%Y", time_format="%H:%M",
+        label="Check In", required=True, widget=forms.DateTimeInput(
+            attrs={
+                "type": "datetime-local",
+                "class": "form-control"
+            }
         ))
     check_out = forms.DateTimeField(
-        label="Check Out", required=True,
-        widget=SplitDateTimeWidget(
-            date_format="%d/%m/%Y", time_format="%H:%M",
+        label="Check Out", required=True, widget=forms.DateTimeInput(
+            attrs={
+                "type": "datetime-local",
+                "class": "form-control"
+            }
         ))
-    phone_no = forms.CharField(max_length=15, widget=forms.NumberInput)
+    # phone_no = forms.CharField(max_length=15, widget=forms.NumberInput)
+
+    class Meta:
+        model = Reservation
+        fields = ("check_in", "check_out")
+
+
+class CancelReservationForm(forms.Form):
+
+    class Meta:
+        model = Reservation
 
 
 class RoomForm(forms.ModelForm):

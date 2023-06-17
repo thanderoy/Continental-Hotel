@@ -44,9 +44,9 @@
 
                                 {% for field in form %}
 
-                                    <div class="form-group">
+                                    <div class="form-group datetimepicker">
                                         <label class="form-label">{{ field.label }}</label> 
-                                        <p> {{ field }} </p>
+                                        <p>{{ field }}</p>
                                         <small class="form-text text-muted">{{ field.errors }}</small>
 
                                         {% if field.help_text %}

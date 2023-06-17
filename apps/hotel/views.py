@@ -5,7 +5,7 @@ from django_daraja.mpesa.core import MpesaClient
 
 from .forms import ReservationForm
 from .helpers import render_to_pdf
-from .models import Category, Reservation, ReservationStatus, Room
+from .models import Category, Reservation
 
 
 def RoomOfferingView(request):
@@ -40,15 +40,16 @@ def RoomDetailView(request, id):
         form = ReservationForm(request.POST)
 
         if form.is_valid():
-            print("valid res")
+            print(form)
             form = form.cleaned_data
 
-            reservation = Reservation.objects.create(
+            if room is None:
+                return HttpResponse("Unfortunately, we are out of those rooms. 😢")
+
+            reservation = room.reserve(
                 owner=request.user,
-                room=room,
                 check_in=form.get("check_in"),
-                check_out=form.get("check_out"),
-                status=ReservationStatus.PENDING,
+                check_out=form.get("check_out")
             )
 
             # # Initiate Payment procedure
@@ -71,7 +72,7 @@ def RoomDetailView(request, id):
 
             return render(request, "hotel/reservation_detail.html", context)
         else:
-            print(form.cleaned_data)
+            print(form)
             return HttpResponse("Invalid form")
 
 
@@ -91,15 +92,18 @@ def ReservationListView(request):
 
     return render(request, "hotel/reservation_list.html", context)
 
+
 def ReservationDetailView(request, id):
     reservation = get_object_or_404(
-        Reservation.objects.get(
-            id=id,
-        )
+        Reservation, id=id,
     )
 
-    if request.method == "POST":
+    if request.method == "GET":
+        reservation = reservation
+
+    elif request.method == "POST":
         reservation.cancel()
+        reservation = reservation
 
     context = {
         "reservation": reservation

@@ -14,3 +14,7 @@ def render_to_pdf(template, context: Optional[dict]):
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type="application/pdf")
     return None
+
+
+class ReservationException(Exception):
+    pass
