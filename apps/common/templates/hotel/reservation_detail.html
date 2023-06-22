@@ -7,11 +7,13 @@
         <div class="col m-5">
             <div class="row align-items-center p-5 w-100">
                 <div class="w-50">
-                    <img src="{{ reservation.room.category.image_url }}" class="d-block mx-lg-auto img-fluid" alt="Room Image" loading="lazy">
+                    <img src="{{ reservation.room.category.image_file.url }}" class="d-block mx-lg-auto img-fluid" alt="Room Image" loading="lazy">
                 </div>
                 <div class="w-50 p-2">
                     <h1 class="display-5 fw-bold lh-1 mb-3">{{ room.category.category_name }}</h1>
-                    <p class="lead">Beds: {{ reservation.room.category.beds }}</p>
+                    <div class="row w-100 bottom-0 mb-2 pb-2" style="color: #757575;">
+                        <div class="col-2"><i class="fa-solid fa-bed p-1"></i><span class="p-2">{{ reservation.room.category.beds }}</span></div>
+                    </div>
                     <p class="lead">Check In: {{ reservation.check_in }}</p>
                     <p class="lead">Check Out: {{ reservation.check_out }}</p>
                     <hr>

@@ -9,7 +9,7 @@ from .models import Category, Reservation
 
 
 def RoomOfferingView(request):
-    offerings = Category.objects.all()
+    offerings = Category.objects.all().order_by("price")
 
     context = {
         "offerings": offerings,
@@ -26,9 +26,6 @@ def RoomDetailView(request, id):
     if request.method == "GET":
         form = ReservationForm()
 
-        if room is None:
-            return HttpResponse("Unfortunately, we are out of those rooms. 😢")
-
         context = {
             "room": room,
             "form": form,
@@ -42,9 +39,6 @@ def RoomDetailView(request, id):
         if form.is_valid():
             print(form)
             form = form.cleaned_data
-
-            if room is None:
-                return HttpResponse("Unfortunately, we are out of those rooms. 😢")
 
             reservation = room.reserve(
                 owner=request.user,
@@ -71,9 +65,6 @@ def RoomDetailView(request, id):
             }
 
             return render(request, "hotel/reservation_detail.html", context)
-        else:
-            print(form)
-            return HttpResponse("Invalid form")
 
 
 def ReservationListView(request):

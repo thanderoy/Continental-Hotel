@@ -15,7 +15,7 @@ class Category(BaseModel):
     category_name = models.CharField(max_length=50)
     beds = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image_url = models.CharField(max_length=1000, null=True, blank=True)
+    image_file = models.ImageField(upload_to="images/category/", null=True)
 
     def __str__(self) -> str:
         return f"{self.category_name} [{self.category_code}] \
@@ -106,4 +106,6 @@ class Reservation(BaseModel):
         Cancels a reservation.
         """
         self.status = ReservationStatus.CANCELLED
+        self.room.is_available = True
+        self.room.save()
         self.save()

@@ -2,8 +2,9 @@
 {% block title %}Continental | Room - {{ room.category.category_name }}{% endblock title %}
 {% block content %}
 
-<div class="container">
-    <div class="row d-flex flex-wrap">
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-12">
 
         {% if room is None %}
 
@@ -28,47 +29,51 @@
 
         {% else %}
 
-            <div class="col m-5">
-                <div class="row align-items-center p-5 w-100">
-                    <div class="w-50">
-                        <img src="{{ room.category.image_url }}" class="d-block mx-lg-auto img-fluid" alt="Room Image" loading="lazy">
+            <div class="row justify-content-center border-2 m-5">
+                <div class="col-4">
+                    <img src="{{ room.category.image_file.url }}" class="d-block mx-lg-auto img-fluid" alt="Room Image" loading="lazy">
+                </div>
+                <div class="col-4 p-2">
+                    <div class="d-flex justify-content-end"><i class="fa-solid fa-star" style="color: #f5c211;"><span class="p-2 text-black">4.5</span></i></div>
+                    <h1 class="display-5 fw-bold lh-1 mb-3">{{ room.category.category_name }}</h1>
+                    <div class="row w-100 bottom-0 mb-2 pb-2" style="color: #757575;">
+                        <div class="col-2"><i class="fa-solid fa-bed p-1"></i><span class="p-2">{{ room.category.beds }}</span></div>
+                        <div class="col-9"><i class="fa-solid fa-tags m-1"></i><span class="p-2">Ksh. {{ room.category.price }}<small>/night</small></span></div>
                     </div>
-                    <div class="w-50 p-2">
-                        <h1 class="display-5 fw-bold lh-1 mb-3">{{ room.category.category_name }}</h1>
-                        <p class="lead">Beds: {{ room.category.beds }}</p>
-                        <p class="lead">Room Price: Ksh. {{ room.category.price }}</p>
-                        <hr>
-                        <div class="p-2 justify-content-center">
-                            <form id="reservation_form" action="" method="POST">
-                                {% csrf_token %}
+                    <div class="">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et nostrum maxime accusantium dolorum quisquam deleniti dicta hic. Amet quaerat veritatis fuga aspernatur autem? Ducimus dicta nihil amet fugit velit asperiores!</p>
+                    </div>
+                    <hr>
+                    <div class="col p-3  justify-content-center">
+                        <form id="reservation_form" action="" method="POST">
+                            {% csrf_token %}
 
-                                {% for field in form %}
+                            {% for field in form %}
 
-                                    <div class="form-group datetimepicker">
-                                        <label class="form-label">{{ field.label }}</label> 
-                                        <p>{{ field }}</p>
-                                        <small class="form-text text-muted">{{ field.errors }}</small>
+                                <div class="form-group mx-auto datetimepicker">
+                                    <label class="form-label">{{ field.label }}</label> 
+                                    <p>{{ field }}</p>
+                                    <small class="form-text text-muted">{{ field.errors }}</small>
 
-                                        {% if field.help_text %}
-                                            <p class="form-text text-muted">{{ field.help_text|safe }}</p>
-                                        {% endif %}
+                                    {% if field.help_text %}
+                                        <p class="form-text text-muted">{{ field.help_text|safe }}</p>
+                                    {% endif %}
 
-                                    </div>
-                        
-                                {% endfor %}
-                                <div class="p-2 justify-content-center d-flex">
-                                    <button type="submit" class="btn btn-primary">Reserve</button>
                                 </div>
-                            </form>
-                        </div>
-                        
+                    
+                            {% endfor %}
+                            <div class="p-2 justify-content-center d-flex">
+                                <button type="submit" class="btn btn-primary">Reserve</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
 
-        {% endif %}
+            {% endif %}
 
+        </div>
     </div>
-</div>
+</section>
 
 {% endblock content %}

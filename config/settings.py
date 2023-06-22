@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     # Local
     "apps.hotel.apps.HotelConfig",
     "apps.authy.apps.AuthyConfig",
-    "django_daraja"
+    "django_daraja",
+    "storages"
 ]
 
 MIDDLEWARE = [
@@ -124,9 +125,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+# STATIC_ROOT = "apps/common/static/"
 
 STATICFILES_DIRS = [
-    BASE_DIR / "apps/common/static",
+    BASE_DIR / "apps/common/static/",
 ]
 
 # Default primary key field type
@@ -155,3 +157,15 @@ LOGIN_URL = "/auth/login/"
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = BASE_DIR / "emails"
+
+# AWS Configs
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_SIGNATURE_VERSION = config("AWS_S3_SIGNATURE_VERSION")
+AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME")
+AWS_S3_FILE_OVERWRITE = config("AWS_S3_FILE_OVERWRITE")
+# AWS_DEFAULT_ACL = config("AWS_DEFAULT_ACL")
+AWS_S3_VERITY = config("AWS_S3_VERITY")
+DEFAULT_FILE_STORAGE = config("DEFAULT_FILE_STORAGE")
+STATICFILES_STORAGE = config("DEFAULT_FILE_STORAGE")

@@ -2,29 +2,46 @@
 {% block title %}Continental | Reservations {% endblock title %}
 {% block content %}
 
-<div class="container">
-    <div class="row d-flex flex-wrap">
+<section class="container">
+    <div class="row">
+        <div class="col m-5">
 
-        {% for reservation in reservations %}
+            {% for reservation in reservations %}
 
-            <div class="col">
-                <a href="{% url 'hotel:reservation_detail' reservation.id %}" class="text-decoration-none">
-                    <div class="card text-dark bg-light mb-3 h-100">
-                        <img src="{{ reservation.room.category.image_url }}" class="card-img-top" alt="Room Image" style="height: 250px;" loading="lazy">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ reservation.room.category.category_name }}</h3>
-                            <p class="card-text">Bed: {{ reservation.room.category.beds }}</p>
-                            <p class="card-text">Status: {{ reservation.status }}</p>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="{% url 'hotel:reservation_detail' reservation.id %}" class="text-decoration-none">
+                <div class="card mb-3 w-75">
+                    <div class="row">
+                        <div class="col-4">
+                            <img src="{{ reservation.room.category.image_file.url }}" class="card-img-top" alt="Room Image" style="height: 250px;" loading="lazy">
+                        </div>
+                        <div class="col-8">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ reservation.room.category.category_name }}</h3>
+                                <div class="row w-100 bottom-0 mb-2 pb-2" style="color: #757575;">
+                                    <div class="col-3"><i class="fa-solid fa-bed p-1"></i><span class="p-2">{{ reservation.room.category.beds }}</span></div>
+                                    <div class="col-4"><i class="fa-solid fa-calendar p-1"></i><span class="p-2">{{ reservation.check_in }}</span></div>
+                                    <div class="col-4"><i class="fa-solid fa-calendar p-1"></i><span class="p-2">{{ reservation.check_out }}</span></div>
+                                </div>
+
+                                {% if reservation.status == 'FULFILLED' %}
+                                    <span class="badge rounded-pill bg-success">Status: {{ reservation.status }}</span>
+                                {% elif reservation.status == 'PENDING' %}
+                                    <span class="badge rounded-pill bg-info">Status: {{ reservation.status }}</span>
+                                {% elif reservation.status == 'CANCELLED' %}
+                                    <span class="badge rounded-pill bg-danger">Status: {{ reservation.status }}</span>
+                                {% endif %}
+
+                            </div>
                         </div>
                     </div>
-                </a>
-            </div>
+                </div>
+            </a>
 
-        {% endfor %}
+            {% endfor %}
 
 
+        </div>
     </div>
-</div>
+</section>
 
 {% endblock content %}

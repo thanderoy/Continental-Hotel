@@ -2,34 +2,44 @@
 {% block title %}Continental | Offerings{% endblock title %}
 {% block content %}
 
-<section class="jumbotron text-center p-5">
-    <h1 class="display-4">The Continental</h1>
-    <hr class="my-4">
-    <p class="lead text-muted">Welcome to the Continental Room Reservation System. Explore our room offerings below.</p>
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-12 text-center p-5 my-5">
+            <h1 class="display-4">The Continental</h1>
+            <hr class="my-4">
+            <p class="lead text-muted">Welcome to the Continental Room Reservation System. Explore our room offerings below.</p>
+        </div>
+    </div>
 </section>
 
-<div class="container">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 d-flex flex-wrap">
-
-        {% for category in offerings %}
-
-            <div class="col">
-                <a href="{% url 'hotel:room_detail' category.id %}" class="text-decoration-none">
-                    <div class="card text-dark bg-light mb-3 h-100">
-                        <img src="{{ category.image_url }}" class="card-img-top" alt="Room Image" style="height: 250px;" loading="lazy">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ category.category_name }}</h3>
-                            <p class="card-text">Bed: {{ category.beds }}</p>
-                            <p class="card-text">Price: {{ category.price }}</p>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+<section class="container-fluid">
+    <div class="row">
+    
+            {% for category in offerings %}
+    
+                <div class="col-lg-3">
+                    <a href="{% url 'hotel:room_detail' category.id %}" class="text-decoration-none">
+                        <div class="card text-dark mb-3 position-relative float-start overflow-hidden h-100">
+                            <div class="w-100 float-start overflow-hidden" style="height: 500px;">
+                                <img src="{{ category.image_file.url }}" alt="Room Image" class="w-100 align-self-start img-fluid" loading="lazy">
+                            </div>
+                            <div class="card card-body w-100 h-50 rounded-bottom rounded-5 position-absolute bottom-0 float-start z-3">
+                                <div class="d-flex justify-content-end"><i class="fa-solid fa-star" style="color: #f5c211;"><span class="p-2 text-black">4.5</span></i></div>
+                                <h3 class="card-title">{{ category.category_name }}</h3>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <div class="row w-100 bottom-0 mb-2 pb-2 position-absolute" style="color: #757575;">
+                                    <div class="col-2"><i class="fa-solid fa-bed p-1"></i><span class="p-2">{{ category.beds }}</span></div>
+                                    <div class="col-9"><i class="fa-solid fa-tags m-1"></i><span class="p-2">Ksh. {{ category.price }}<small>/night</small></span></div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
-
-        {% endfor %}
-
+                    </a>
+                </div>
+    
+            {% endfor %}
+    
     </div>
-</div>
+</section>
+
 
 {% endblock content %}
