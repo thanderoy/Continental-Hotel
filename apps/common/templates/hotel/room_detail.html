@@ -29,9 +29,9 @@
 
         {% else %}
 
-            <div class="row justify-content-center border-2 m-5">
+            <div class="row justify-content-center align-items-center border-2 m-5">
                 <div class="col-4">
-                    <img src="{{ room.category.image_file.url }}" class="d-block mx-lg-auto img-fluid" alt="Room Image" loading="lazy">
+                    <img src="{{ room.category.image_file.url }}" class="d-block mx-lg-auto img-fluid" alt="Room Image" loading="eager">
                 </div>
                 <div class="col-4 p-2">
                     <div class="d-flex justify-content-end"><i class="fa-solid fa-star" style="color: #f5c211;"><span class="p-2 text-black">4.5</span></i></div>

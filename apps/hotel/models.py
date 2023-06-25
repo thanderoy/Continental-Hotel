@@ -1,4 +1,5 @@
 from __future__ import annotations
+from django.utils import timezone
 
 from django.conf import settings
 from django.db import models
@@ -90,6 +91,7 @@ class Reservation(BaseModel):
         max_length=50, choices=ReservationStatus.choices,
         default=ReservationStatus.PENDING
     )
+    cancellation_date = models.DateTimeField(null=True, blank=True, default=None)
 
     def __str__(self) -> str:
         return (
@@ -107,5 +109,6 @@ class Reservation(BaseModel):
         """
         self.status = ReservationStatus.CANCELLED
         self.room.is_available = True
+        self.cancellation_date = timezone.now()
         self.room.save()
         self.save()

@@ -3,11 +3,11 @@
 {% block content %}
 
 <section class="container-fluid">
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-12 text-center p-5 my-5">
             <h1 class="display-4">The Continental</h1>
-            <hr class="my-4">
-            <p class="lead text-muted">Welcome to the Continental Room Reservation System. Explore our room offerings below.</p>
+            <hr class="w-75 mx-auto">
+            <p class="lead text-muted p-2">Welcome to the Continental Room Reservation System. Explore our room offerings below.</p>
         </div>
     </div>
 </section>
@@ -19,9 +19,9 @@
     
                 <div class="col-lg-3">
                     <a href="{% url 'hotel:room_detail' category.id %}" class="text-decoration-none">
-                        <div class="card text-dark mb-3 position-relative float-start overflow-hidden h-100">
-                            <div class="w-100 float-start overflow-hidden" style="height: 500px;">
-                                <img src="{{ category.image_file.url }}" alt="Room Image" class="w-100 align-self-start img-fluid" loading="lazy">
+                        <div class="card text-dark mb-3 position-relative float-start overflow-hidden w-100" style="min-height: 500px">
+                            <div class="float-start h-100 position-absolute">
+                                <img src="{{ category.image_file.url }}" alt="Room Image" class="h-100 w-100 object-fit-cover align-self-start img-fluid" loading="eager">
                             </div>
                             <div class="card card-body w-100 h-50 rounded-bottom rounded-5 position-absolute bottom-0 float-start z-3">
                                 <div class="d-flex justify-content-end"><i class="fa-solid fa-star" style="color: #f5c211;"><span class="p-2 text-black">4.5</span></i></div>

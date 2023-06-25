@@ -2,27 +2,28 @@
 {% block title %}Continental | Reservation - {{ reservation.room.category.category_name }}{% endblock title %}
 {% block content %}
 
-<div class="container">
-    <div class="row d-flex flex-wrap">
-        <div class="col m-5">
-            <div class="row align-items-center p-5 w-100">
-                <div class="w-50">
-                    <img src="{{ reservation.room.category.image_file.url }}" class="d-block mx-lg-auto img-fluid" alt="Room Image" loading="lazy">
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-12 m-5">
+            <div class="row justify-content-center align-items-center m-5 border-2">
+                <div class="col-4 p-2">
+                    <img src="{{ reservation.room.category.image_file.url }}" class="d-block mx-lg-auto img-fluid" alt="Room Image" loading="eager  ">
                 </div>
-                <div class="w-50 p-2">
-                    <h1 class="display-5 fw-bold lh-1 mb-3">{{ room.category.category_name }}</h1>
+                <div class="col-4 p-2">
+                    <h1 class="display-5 fw-bold lh-1 mb-3">{{ reservation.room.category.category_name }}</h1>
                     <div class="row w-100 bottom-0 mb-2 pb-2" style="color: #757575;">
                         <div class="col-2"><i class="fa-solid fa-bed p-1"></i><span class="p-2">{{ reservation.room.category.beds }}</span></div>
+                        <div class="col-9"><i class="fa-solid fa-tags m-1"></i><span class="p-2">Ksh. {{ reservation.room.category.price }}<small>/night</small></span></div>
                     </div>
-                    <p class="lead">Check In: {{ reservation.check_in }}</p>
-                    <p class="lead">Check Out: {{ reservation.check_out }}</p>
+                    <div class="col-4"><i class="fa-solid fa-calendar p-1"></i><span class="p-2">{{ reservation.check_in }}</span></div>
+                    <div class="col-4"><i class="fa-solid fa-calendar p-1"></i><span class="p-2">{{ reservation.check_out }}</span></div>
                     <hr>
                     <div class="p-2 ">
-                        <p class="lead">Status: {{ reservation.status }}</p>
+                        {% if reservation.status == 'FULFILLED' %}
+                            <span class="text-muted">Status: </span><span class="badge rounded-pill bg-success">{{ reservation.status }}</span>
 
-                        {% if reservation.status == "PENDING"%}
-
-
+                        {% elif reservation.status == 'PENDING' %}
+                            <span class="text-muted">Status: </span><span class="badge rounded-pill bg-info">{{ reservation.status }}</span>
                             <form method="POST">
                                 {% csrf_token %}
 
@@ -31,13 +32,18 @@
                                 </div>
                             </form>
 
+                        {% elif reservation.status == 'CANCELLED' %}
+                            <span class="text-muted">Status: </span><span class="badge rounded-pill bg-danger">{{ reservation.status }}</span>
+                            <div class="text-muted">Date Cancelled: {{ reservation.cancellation_date }}</div>
+
                         {% endif %}
+
                         
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 {% endblock content %}

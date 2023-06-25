@@ -12,7 +12,7 @@
                 <div class="card mb-3 w-75">
                     <div class="row">
                         <div class="col-4">
-                            <img src="{{ reservation.room.category.image_file.url }}" class="card-img-top" alt="Room Image" style="height: 250px;" loading="lazy">
+                            <img src="{{ reservation.room.category.image_file.url }}" class="card-img-top" alt="Room Image" style="height: 250px;" loading="eager">
                         </div>
                         <div class="col-8">
                             <div class="card-body">
@@ -24,11 +24,12 @@
                                 </div>
 
                                 {% if reservation.status == 'FULFILLED' %}
-                                    <span class="badge rounded-pill bg-success">Status: {{ reservation.status }}</span>
+                                    <span class="text-muted">Status: </span><span class="badge rounded-pill bg-success">{{ reservation.status }}</span>
                                 {% elif reservation.status == 'PENDING' %}
-                                    <span class="badge rounded-pill bg-info">Status: {{ reservation.status }}</span>
+                                    <span class="text-muted">Status: </span><span class="badge rounded-pill bg-info">{{ reservation.status }}</span>
                                 {% elif reservation.status == 'CANCELLED' %}
-                                    <span class="badge rounded-pill bg-danger">Status: {{ reservation.status }}</span>
+                                    <span class="text-muted">Status: </span><span class="badge rounded-pill bg-danger">{{ reservation.status }}</span>
+                                    <span class="text-muted">Date Cancelled: {{ reservation.cancellation_date }}</span>
                                 {% endif %}
 
                             </div>
