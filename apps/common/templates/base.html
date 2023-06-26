@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
     <title>{% block title %}Home{% endblock title %}</title>
 </head>
-<body class="vw-100 vh-100">
+<body class="vw-100 h-100 position-relative">
     <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'hotel:room_offering' %}">El Continental</a>
@@ -44,7 +44,7 @@
         {% endblock content %}
     </div>
 
-    <footer class="container-fluid bg-dark text-light overflow-hidden m-0 bottom-0 position-absolute">
+    <footer class="container-fluid bg-dark text-light overflow-hidden bottom-0 position-absolute">
         <div class="row justify-content-center text-center">
             <div class="w-75 p-4">                
                 <p>This is a test site. Incase all rooms have been booked, contact me. I'll work something out</p>

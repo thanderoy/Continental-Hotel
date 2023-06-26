@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import os
 from pathlib import Path
+
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", default=False)
+DEBUG = config("DEBUG", default=False)
 
-ALLOWED_HOSTS = ["continental-hotel.up.railway.app","localhost"]
+ALLOWED_HOSTS = ["continental-hotel.up.railway.app", "localhost"]
 
 
 # Application definition
@@ -87,12 +88,17 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME"),
-        "USER": os.environ.get("DB_USER"),
-        "PASSWORD": os.environ.get("DB_PASSWORD"),
-        "HOST": os.environ.get("DB_HOST"),
-        "PORT": os.environ.get("DB_PORT"),
+        "NAME": config("DB_NAME"),
+        "USER": config("DB_USER"),
+        "PASSWORD": config("DB_PASSWORD"),
+        "HOST": config("DB_HOST"),
+        "PORT": config("DB_PORT"),
     },
+
+    # "default": {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": BASE_DIR / "db.sqlite3",
+    # }
 }
 
 
@@ -146,13 +152,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "authy.User"
 
 # MPESA Configs
-MPESA_ENVIRONMENT = os.environ.get("MPESA_ENVIRONMENT")
-MPESA_CONSUMER_KEY = os.environ.get("MPESA_CONSUMER_KEY")
-MPESA_CONSUMER_SECRET = os.environ.get("MPESA_CONSUMER_SECRET")
-MPESA_SHORT_CODE = os.environ.get("MPESA_SHORT_CODE")
-MPESA_PASSKEY = os.environ.get("MPESA_PASSKEY")
-MPESA_INITIATOR_USERNAME = os.environ.get("MPESA_INITIATOR_USERNAME")
-MPESA_INITIATOR_SECURITY_CREDENTIAL = os.environ.get("MPESA_INITIATOR_SECURITY_CREDENTIAL")
+MPESA_ENVIRONMENT = config("MPESA_ENVIRONMENT")
+MPESA_CONSUMER_KEY = config("MPESA_CONSUMER_KEY")
+MPESA_CONSUMER_SECRET = config("MPESA_CONSUMER_SECRET")
+MPESA_SHORT_CODE = config("MPESA_SHORT_CODE")
+MPESA_PASSKEY = config("MPESA_PASSKEY")
+MPESA_INITIATOR_USERNAME = config("MPESA_INITIATOR_USERNAME")
+MPESA_INITIATOR_SECURITY_CREDENTIAL = config("MPESA_INITIATOR_SECURITY_CREDENTIAL")
 
 # Authentication backends
 AUTHENTICATION_BACKENDS = (
@@ -166,13 +172,13 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = BASE_DIR / "emails"
 
 # AWS Configs
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_SIGNATURE_VERSION = os.environ.get("AWS_S3_SIGNATURE_VERSION")
-AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME")
-AWS_S3_FILE_OVERWRITE = os.environ.get("AWS_S3_FILE_OVERWRITE")
-# AWS_DEFAULT_ACL = os.environ.get("AWS_DEFAULT_ACL")
-AWS_S3_VERITY = os.environ.get("AWS_S3_VERITY")
-DEFAULT_FILE_STORAGE = os.environ.get("DEFAULT_FILE_STORAGE")
-STATICFILES_STORAGE = os.environ.get("DEFAULT_FILE_STORAGE")
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_SIGNATURE_VERSION = config("AWS_S3_SIGNATURE_VERSION")
+AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME")
+AWS_S3_FILE_OVERWRITE = config("AWS_S3_FILE_OVERWRITE")
+# AWS_DEFAULT_ACL = config("AWS_DEFAULT_ACL")
+AWS_S3_VERITY = config("AWS_S3_VERITY")
+DEFAULT_FILE_STORAGE = config("DEFAULT_FILE_STORAGE")
+STATICFILES_STORAGE = config("DEFAULT_FILE_STORAGE")
