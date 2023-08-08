@@ -45,8 +45,7 @@ INSTALLED_APPS = [
     "django_daraja",
     "corsheaders",
     "storages",
-    "whitenoise.runserver_nostatic"
-    
+    "whitenoise.runserver_nostatic",
 ]
 
 MIDDLEWARE = [
@@ -94,7 +93,6 @@ DATABASES = {
         "HOST": config("DB_HOST"),
         "PORT": config("DB_PORT"),
     },
-
     # "default": {
     #     "ENGINE": "django.db.backends.sqlite3",
     #     "NAME": BASE_DIR / "db.sqlite3",
@@ -161,14 +159,12 @@ MPESA_INITIATOR_USERNAME = config("MPESA_INITIATOR_USERNAME")
 MPESA_INITIATOR_SECURITY_CREDENTIAL = config("MPESA_INITIATOR_SECURITY_CREDENTIAL")
 
 # Authentication backends
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
+AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
 
 # Login URL (for redirects)
 LOGIN_URL = "/auth/login/"
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "emails"
 
 # AWS Configs
