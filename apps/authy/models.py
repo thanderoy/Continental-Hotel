@@ -1,5 +1,4 @@
-from django.contrib.auth.models import (
-    AbstractUser, BaseUserManager, PermissionsMixin)
+from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -32,7 +31,7 @@ class UserManager(BaseUserManager):
             username=username,
             first_name=first_name,
             last_name=last_name,
-            **other_fields
+            **other_fields,
         )
         print(f"P - {password}")
         user.set_password(password)
@@ -85,6 +84,7 @@ class UserProfile(BaseModel):
     Used to store any other extra details for the users.
 
     """
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 

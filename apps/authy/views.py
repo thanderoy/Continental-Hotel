@@ -7,7 +7,6 @@ from .models import User
 
 
 def register_user(request):
-
     if request.method == "GET":
         form = CustomUserCreationForm()
 
@@ -28,7 +27,6 @@ def register_user(request):
 
 
 def login_user(request):
-
     if request.method == "GET":
         form = CustomUserLoginForm()
 
@@ -38,8 +36,7 @@ def login_user(request):
         if form.is_valid():
             form = form.cleaned_data
             user = authenticate(
-                username=form.get("email"),
-                password=form.get("password")
+                username=form.get("email"), password=form.get("password")
             )
 
             if user is not None:
@@ -59,21 +56,20 @@ def logout_user(request):
 
 
 def password_reset(request):
-    
     if request.method == "GET":
         form = CustomPasswordResetForm()
-        
+
     elif request.method == "POST":
         form = CustomPasswordResetForm(request.POST)
-        
+
         if form.is_valid():
             form.save()
 
             return render(request, "authy/post_password_reset.html")
-        
+
         else:
             form = CustomPasswordResetForm()
-    
+
     context = {"form": form}
-    
+
     return render(request, "authy/password_reset.html", context)

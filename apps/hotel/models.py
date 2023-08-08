@@ -26,17 +26,13 @@ class Category(BaseModel):
         """
         Returns all rooms in specific category.
         """
-        return Room.objects.filter(
-            category=self
-        )
+        return Room.objects.filter(category=self)
 
     def get_rooms_available(self) -> QuerySet[Room]:
         """
         Returns all available rooms in specific category.
         """
-        return self.get_rooms().filter(
-            is_available=True
-        )
+        return self.get_rooms().filter(is_available=True)
 
 
 class Room(BaseModel):
@@ -45,16 +41,12 @@ class Room(BaseModel):
     is_available = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        return (
-            f"Room {self.room_number} {self.category.category_name} \
+        return f"Room {self.room_number} {self.category.category_name} \
             - {self.category.price}"
-        )
 
     def reserve(self, owner, check_in, check_out):
         if not self.is_available:
-            raise ReservationException(
-                f"Room {self.room_number} is already reserved"
-            )
+            raise ReservationException(f"Room {self.room_number} is already reserved")
 
         try:
             reservation = Reservation.objects.create(
@@ -88,16 +80,15 @@ class Reservation(BaseModel):
     check_in = models.DateTimeField()
     check_out = models.DateTimeField()
     status = models.CharField(
-        max_length=50, choices=ReservationStatus.choices,
-        default=ReservationStatus.PENDING
+        max_length=50,
+        choices=ReservationStatus.choices,
+        default=ReservationStatus.PENDING,
     )
     cancellation_date = models.DateTimeField(null=True, blank=True, default=None)
 
     def __str__(self) -> str:
-        return (
-            f"{self.room.room_number} {self.room.category} -> \
+        return f"{self.room.room_number} {self.room.category} -> \
             {self.owner} ({self.check_in} - {self.check_out})"
-        )
 
     @property
     def room_category(self) -> str:

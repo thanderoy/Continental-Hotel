@@ -18,8 +18,7 @@ def RoomOfferingView(request):
 
 
 def RoomDetailView(request, id):
-    category = get_object_or_404(
-        Category, id=id)
+    category = get_object_or_404(Category, id=id)
 
     room = category.get_rooms_available().first()
 
@@ -43,7 +42,7 @@ def RoomDetailView(request, id):
             reservation = room.reserve(
                 owner=request.user,
                 check_in=form.get("check_in"),
-                check_out=form.get("check_out")
+                check_out=form.get("check_out"),
             )
 
             # # Initiate Payment procedure
@@ -77,16 +76,15 @@ def ReservationListView(request):
         # For staff + superusers, get all Reservations.
         reservations = Reservation.objects.all()
 
-    context = {
-        "reservations": reservations
-    }
+    context = {"reservations": reservations}
 
     return render(request, "hotel/reservation_list.html", context)
 
 
 def ReservationDetailView(request, id):
     reservation = get_object_or_404(
-        Reservation, id=id,
+        Reservation,
+        id=id,
     )
 
     if request.method == "GET":
@@ -96,9 +94,7 @@ def ReservationDetailView(request, id):
         reservation.cancel()
         reservation = reservation
 
-    context = {
-        "reservation": reservation
-    }
+    context = {"reservation": reservation}
 
     return render(request, "hotel/reservation_detail.html", context)
 

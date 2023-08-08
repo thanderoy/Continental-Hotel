@@ -10,4 +10,3 @@ class RoomAdmin(admin.ModelAdmin):
 admin.site.register(Room, RoomAdmin)
 admin.site.register(Reservation)
 admin.site.register(Category)
-

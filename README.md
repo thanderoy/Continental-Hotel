@@ -1,4 +1,4 @@
-# Hotel Reservation Platform
+# 🏨 Continental Hotel
 
 This project is a basic concept of a Hotel Reservation Platform designed to streamline the process of booking hotel rooms. It for clients to, create accounts on the platform, reserve rooms and manage their reservations, with a possibility for payment gateway integration.
 

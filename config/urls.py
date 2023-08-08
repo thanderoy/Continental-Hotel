@@ -21,11 +21,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("auth/", include("apps.authy.urls", namespace='auth')),
-    path("", include("apps.hotel.urls", namespace="hotel"))
+    path("auth/", include("apps.authy.urls", namespace="auth")),
+    path("", include("apps.hotel.urls", namespace="hotel")),
 ]
 
 if settings.DEBUG:  # Dev only
-    urlpatterns += static(
-        settings.STATIC_URL, document_root=settings.STATIC_ROOT
-    )
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -13,10 +13,8 @@ class BaseModel(models.Model):
     id = models.UUIDField(
         default=uuid.uuid4, editable=False, unique=True, primary_key=True
     )
-    created = models.DateTimeField(
-        db_index=True, editable=False, default=timezone.now)
-    updated = models.DateTimeField(
-        db_index=True, editable=False, default=timezone.now)
+    created = models.DateTimeField(db_index=True, editable=False, default=timezone.now)
+    updated = models.DateTimeField(db_index=True, editable=False, default=timezone.now)
 
     def save(self, *args, **kwargs):
         """Ensure validations are run and updated/created preserved."""
